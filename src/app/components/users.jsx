@@ -10,7 +10,7 @@ const Users = () => {
 
   const renderPhrase = number => {
     const lastDigit = Number(number.toString().slice(-1))
-    return number === 1 || (number > 4 && number < 22) || (lastDigit === 0 || lastDigit === 1 || lastDigit > 4)
+    return number === 1 || (number > 4 && number < 22) || (lastDigit <= 1 || lastDigit > 4)
       ? 'Человек тусанёт'
       : 'Человека тусанут'
   }
