@@ -10,7 +10,7 @@ const Users = () => {
 
   const renderPhrase = number => {
     const lastDigit = Number(number.toString().slice(-1))
-    return number === 1 || (number > 4 && (lastDigit === 0 || lastDigit === 1 || lastDigit > 4))
+    return number === 1 || (number > 4 && number < 22) || (lastDigit === 0 || lastDigit === 1 || lastDigit > 4)
       ? 'Человек тусанёт'
       : 'Человека тусанут'
   }
@@ -20,7 +20,7 @@ const Users = () => {
       <h2>
         <span className={'badge ' + (users.length > 0 ? 'bg-primary' : 'bg-danger')}>
             {users.length > 0
-              ? `${users.length} ${renderPhrase(21)} с тобой сегодня`
+              ? `${users.length} ${renderPhrase(users.length)} с тобой сегодня`
               : 'Никто с тобой не тусанет'}
         </span>
       </h2>
