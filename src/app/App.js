@@ -10,9 +10,11 @@ function App() {
     setUsers(p => p.filter(user => user._id !== userId))
   }
 
-  const handleToggleBookMark = (id) => {
+  const handleToggleBookMark = id => {
     setUsers(p => p.map(user => user._id === id
-      ? {...user, bookmark: !user.bookmark} : user))
+      ? {...user, bookmark: !user.bookmark}
+      : user
+    ))
   }
 
   return (
