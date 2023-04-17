@@ -14,7 +14,7 @@ const SearchStatus = ({length}) => {
         className={'badge ' + (length > 0 ? 'bg-primary' : 'bg-danger')}
       >
         {length
-          ? `${length + ' ' + renderPhrase(length)}   с тобой сегодня`
+          ? `${length} ${renderPhrase(length)} с тобой сегодня`
           : 'Никто с тобой не тусанет'}
       </span>
     </h2>
