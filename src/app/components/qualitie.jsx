@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const Qualities = ({color, name}) => {
   return (
@@ -6,6 +7,11 @@ const Qualities = ({color, name}) => {
       {name}
     </span>
   )
+}
+
+Qualities.propTypes = {
+  color: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired
 }
 
 export default Qualities
