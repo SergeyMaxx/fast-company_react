@@ -1,5 +1,5 @@
 import React from 'react'
-import Qualities from './qualitie'
+import Qualities from './qualities'
 import BookMark from './bookmark'
 import PropTypes from 'prop-types'
 
@@ -12,7 +12,7 @@ const User = ({onDelete, onToggleBookMark, user}) => {
           <Qualities
             key={q._id}
             color={q.color}
-            name={user.name}
+            name={q.name}
           />)
         )}
       </td>
