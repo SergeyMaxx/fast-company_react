@@ -30,7 +30,7 @@ const Users = ({users, onDelete, onToggleBookMark}) => {
   }, [selectedProf])
 
   const filteredUser = selectedProf
-    ? users.filter(u => JSON.stringify(u.profession) === JSON.stringify(selectedProf))
+    ? users.filter(u => u.profession._id === selectedProf._id)
     : users
 
   const count = filteredUser.length
