@@ -1,100 +1,93 @@
 import React, {useEffect, useState} from 'react'
-import User from './user'
 import {paginate} from '../utils/paginate'
 import Pagination from './pagination'
-import PropTypes from 'prop-types'
 import GroupList from './groupList'
 import api from '../api'
 import SearchStatus from './searchStatus'
+import UsersTable from './usersTable'
+import _ from 'lodash'
 
-const Users = ({users, onDelete, onToggleBookMark}) => {
+const Users = () => {
+  const [users, setUsers] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [professions, setProfessions] = useState(null)
   const [selectedProf, setSelectedProf] = useState()
-
+  const [sortBy, setSortBy] = useState({path: 'name', order: 'asc'})
   const pageSize = 4
-  const pageCount = Math.ceil(users.length / pageSize)
 
   useEffect(() => {
-    if (currentPage > pageCount) {
-      setCurrentPage(pageCount)
-    }
-  }, [users.length, currentPage, pageCount])
+    api.users().then(data => setUsers(data))
+  }, [])
 
   useEffect(() => {
     api.professions().then(data => setProfessions(data))
   }, [])
 
+  const handleDelete = userId => {
+    setUsers(p => p.filter(user => user._id !== userId))
+  }
+
+  const handleToggleBookMark = id => {
+    setUsers(p => p.map(user => user._id === id
+      ? {...user, bookmark: !user.bookmark}
+      : user
+    ))
+  }
+
   useEffect(() => {
     setCurrentPage(1)
   }, [selectedProf])
 
-  const filteredUser = selectedProf
-    ? users.filter(u => u.profession._id === selectedProf._id)
-    : users
+  if (users) {
+    const filteredUser = selectedProf
+      ? users.filter(u => u.profession._id === selectedProf._id)
+      : users
 
-  const count = filteredUser.length
-  const userCrop = paginate(filteredUser, currentPage, pageSize)
+    const count = filteredUser.length
+    const sortedUser = _.orderBy(filteredUser, [sortBy.path], [sortBy.order])
+    const userCrop = paginate(sortedUser, currentPage, pageSize)
 
-  return (
-    <div className="d-flex">
-      {professions && (
-        <div className="d-flex flex-column flex-shrink-0 p-3">
-          <GroupList
-            selectedItem={selectedProf}
-            items={professions}
-            onItemSelect={item => setSelectedProf(item)}
-          />
-          <button className="btn  btn-secondary mt-2" onClick={() => setSelectedProf(null)}>
-            Очистить
-          </button>
-        </div>
-      )}
-      <div className="d-flex flex-column">
-        <SearchStatus length={count}/>
-        {count > 0 && (
-          <table className="table">
-            <thead>
-            <tr>
-              <th scope="col">Имя</th>
-              <th scope="col">Качества</th>
-              <th scope="col">Профессия</th>
-              <th scope="col">Встретился, раз</th>
-              <th scope="col">Оценка</th>
-              <th scope="col">Избранное</th>
-              <th/>
-            </tr>
-            </thead>
-            <tbody>
-            {userCrop.map(user => (
-              <User
-                key={user._id}
-                onDelete={onDelete}
-                onToggleBookMark={onToggleBookMark}
-                user={user}
-              />
-            ))}
-            </tbody>
-          </table>
+    return (
+      <div className="d-flex">
+        {professions && (
+          <div className="d-flex flex-column flex-shrink-0 p-3">
+            <GroupList
+              selectedItem={selectedProf}
+              items={professions}
+              onItemSelect={item => setSelectedProf(item)}
+            />
+            <button
+              className="btn  btn-secondary mt-2"
+              onClick={() => setSelectedProf(null)}
+            >
+              Очистить
+            </button>
+          </div>
         )}
-        <div className="d-flex justify-content-center">
-          {count > pageSize &&
+        <div className="d-flex flex-column">
+          <SearchStatus length={count}/>
+          {count > 0 && (
+            <UsersTable
+              users={userCrop}
+              onSort={item => setSortBy(item)}
+              selectedSort={sortBy}
+              onDelete={handleDelete}
+              onToggleBookMark={handleToggleBookMark}
+            />
+          )}
+          <div className="d-flex justify-content-center">
             <Pagination
-              pageCount={pageCount}
+              itemsCount={count}
+              pageSize={pageSize}
               currentPage={currentPage}
               onPageChange={pageIndex => setCurrentPage(pageIndex)}
             />
-          }
+          </div>
         </div>
       </div>
-    </div>
-  )
-}
-
-Users.propTypes = {
-  onDelete: PropTypes.func.isRequired,
-  onToggleBookMark: PropTypes.func.isRequired,
-  users: PropTypes.arrayOf(PropTypes.object)
+    )
+  }
+  return 'Loading...'
 }
 
 export default Users
