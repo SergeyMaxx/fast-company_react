@@ -120,8 +120,15 @@ const users = [
   }
 ]
 
+const getById = id => new Promise(res => {
+  setTimeout(() => res(users.find(u => u._id === id)), 1000)
+})
+
 const fetchAll = () => new Promise(res => {
   setTimeout(() => res(users), 1000)
 })
 
-export default fetchAll
+export default {
+  getById,
+  fetchAll
+}

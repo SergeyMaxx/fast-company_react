@@ -7,7 +7,7 @@ import SearchStatus from './searchStatus'
 import UsersTable from './usersTable'
 import _ from 'lodash'
 
-const Users = () => {
+const UsersList = () => {
   const [users, setUsers] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [professions, setProfessions] = useState(null)
@@ -16,7 +16,7 @@ const Users = () => {
   const pageSize = 4
 
   useEffect(() => {
-    api.users().then(data => setUsers(data))
+    api.users.fetchAll().then(data => setUsers(data))
   }, [])
 
   useEffect(() => {
@@ -90,4 +90,4 @@ const Users = () => {
   return 'Loading...'
 }
 
-export default Users
+export default UsersList
