@@ -17,9 +17,6 @@ const UsersList = () => {
 
   useEffect(() => {
     api.users.fetchAll().then(data => setUsers(data))
-  }, [])
-
-  useEffect(() => {
     api.professions().then(data => setProfessions(data))
   }, [])
 
