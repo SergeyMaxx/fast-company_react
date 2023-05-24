@@ -10,10 +10,21 @@ import _ from 'lodash'
 const UsersList = () => {
   const [users, setUsers] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
+  const [search, setSearch] = useState('')
   const [professions, setProfessions] = useState(null)
   const [selectedProf, setSelectedProf] = useState()
   const [sortBy, setSortBy] = useState({path: 'name', order: 'asc'})
   const pageSize = 4
+
+  const handleSelectProf = item => {
+    setSearch('')
+    setSelectedProf(item)
+  }
+
+  const handleSearch = ({target}) => {
+    setSelectedProf(undefined)
+    setSearch(target.value)
+  }
 
   useEffect(() => {
     api.users.fetchAll().then(data => setUsers(data))
@@ -33,12 +44,16 @@ const UsersList = () => {
 
   useEffect(() => {
     setCurrentPage(1)
-  }, [selectedProf])
+  }, [selectedProf, search])
 
   if (users) {
-    const filteredUser = selectedProf
+    const filterUse = selectedProf
       ? users.filter(u => u.profession._id === selectedProf._id)
       : users
+
+    const filteredUser = search
+      ? users.filter(u => u.name.toLowerCase().includes(search))
+      : filterUse
 
     const count = filteredUser.length
     const sortedUser = _.orderBy(filteredUser, [sortBy.path], [sortBy.order])
@@ -51,7 +66,7 @@ const UsersList = () => {
             <GroupList
               selectedItem={selectedProf}
               items={professions}
-              onItemSelect={item => setSelectedProf(item)}
+              onItemSelect={handleSelectProf}
             />
             <button
               className="btn  btn-secondary mt-2"
@@ -63,6 +78,13 @@ const UsersList = () => {
         )}
         <div className="d-flex flex-column">
           <SearchStatus length={count}/>
+          <input
+            type="text"
+            onChange={handleSearch}
+            placeholder="Search"
+            className="form-control"
+            value={search}
+          />
           {count > 0 && (
             <UsersTable
               users={userCrop}
