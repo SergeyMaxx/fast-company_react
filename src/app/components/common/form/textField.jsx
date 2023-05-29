@@ -13,7 +13,7 @@ const TextField = ({label, type, name, value, onChange, placeholder, error}) => 
           id={name}
           name={name}
           value={value}
-          onChange={onChange}
+          onChange={e => onChange(e.target)}
           placeholder={placeholder}
           className={'form-control' + (error ? ' is-invalid' : '')}
         />
@@ -30,6 +30,10 @@ const TextField = ({label, type, name, value, onChange, placeholder, error}) => 
       </div>
     </div>
   )
+}
+
+TextField.defaultProps = {
+  type: 'text'
 }
 
 TextField.propTypes = {

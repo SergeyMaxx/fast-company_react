@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Qualities from './qualities'
+import Quality from './quality'
 
 const QualitiesList = ({qualities}) => {
   return (
     <>
       {qualities.map(q => (
-        <Qualities
+        <Quality
           key={q._id}
           color={q.color}
           name={q.name}
