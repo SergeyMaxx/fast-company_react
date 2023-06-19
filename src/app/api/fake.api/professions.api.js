@@ -17,7 +17,9 @@ export const professions = [
 ]
 
 const fetchAll = () => new Promise(res => {
-  setTimeout(() => res(professions), 1000)
+  setTimeout(() => res(professionsObject), 1000)
 })
 
-export default fetchAll
+export default {
+  fetchAll
+}
