@@ -6,6 +6,7 @@ import TextField from '../../common/form/textField'
 import SelectField from '../../common/form/selectField'
 import RadioField from '../../common/form/radioField'
 import MultiSelectField from '../../common/form/multiSelectField'
+import BackHistoryButton from '../../common/backButton'
 
 const EditUserPage = () => {
   const {userId} = useParams()
@@ -62,7 +63,7 @@ const EditUserPage = () => {
       }))
     )
 
-    api.professions().then(data => {
+    api.professions.fetchAll().then(data => {
       const professionsList = Object.keys(data).map(prof => ({
         label: data[prof].name,
         value: data[prof]._id
@@ -70,7 +71,7 @@ const EditUserPage = () => {
       setProfessions(professionsList)
     })
 
-    api.qualities().then(data => {
+    api.qualities.fetchAll().then(data => {
       const qualitiesList = Object.keys(data).map(qual => ({
         value: data[qual]._id,
         label: data[qual].name,
@@ -136,62 +137,64 @@ const EditUserPage = () => {
 
   return (
     <div className="container mt-5">
+      <BackHistoryButton/>
       <div className="row">
         <div className="col-md-6 offset-md-3 shadow p-4">
           {!loading && Object.keys(professions).length > 0
-            ?
-            <form onSubmit={handleSubmit}>
-              <TextField
-                label="Name"
-                name="name"
-                value={data.name}
-                onChange={handleChange}
-                error={errors.name}
-                placeholder="enter Name"
-              />
-              <TextField
-                label="E-mail"
-                name="email"
-                value={data.email}
-                onChange={handleChange}
-                error={errors.email}
-                placeholder="enter Email"
-              />
-              <SelectField
-                label="Choose your profession"
-                defaultOption="Choose..."
-                options={professions}
-                name="profession"
-                onChange={handleChange}
-                value={data.profession}
-                error={errors.profession}
-              />
-              <RadioField
-                options={[
-                  {name: 'Male', value: 'male'},
-                  {name: 'Female', value: 'female'},
-                  {name: 'Other', value: 'other'}
-                ]}
-                value={data.sex}
-                name="sex"
-                onChange={handleChange}
-                label="Choose your sex"
-              />
-              <MultiSelectField
-                defaultValue={data.qualities}
-                options={qualities}
-                onChange={handleChange}
-                name="qualities"
-                label="Choose your qualities"
-              />
-              <button
-                type="submit"
-                disabled={isValid}
-                className="btn btn-primary w-100 mx-auto"
-              >
-                Обновить
-              </button>
-            </form>
+            ? (
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  label="Name"
+                  name="name"
+                  value={data.name}
+                  onChange={handleChange}
+                  error={errors.name}
+                  placeholder="enter Name"
+                />
+                <TextField
+                  label="E-mail"
+                  name="email"
+                  value={data.email}
+                  onChange={handleChange}
+                  error={errors.email}
+                  placeholder="enter Email"
+                />
+                <SelectField
+                  label="Choose your profession"
+                  defaultOption="Choose..."
+                  options={professions}
+                  name="profession"
+                  onChange={handleChange}
+                  value={data.profession}
+                  error={errors.profession}
+                />
+                <RadioField
+                  options={[
+                    {name: 'Male', value: 'male'},
+                    {name: 'Female', value: 'female'},
+                    {name: 'Other', value: 'other'}
+                  ]}
+                  value={data.sex}
+                  name="sex"
+                  onChange={handleChange}
+                  label="Choose your sex"
+                />
+                <MultiSelectField
+                  defaultValue={data.qualities}
+                  options={qualities}
+                  onChange={handleChange}
+                  name="qualities"
+                  label="Choose your qualities"
+                />
+                <button
+                  type="submit"
+                  disabled={isValid}
+                  className="btn btn-primary w-100 mx-auto"
+                >
+                  Обновить
+                </button>
+              </form>
+            )
             : <h3>Loading...</h3>
           }
         </div>

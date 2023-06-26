@@ -11,4 +11,6 @@ const fetchAll = () => new Promise(resolve => {
   setTimeout(() => resolve(qualities), 2000)
 })
 
-export default fetchAll
+export default {
+  fetchAll
+}

@@ -50,7 +50,7 @@ const RegisterForm = () => {
   }
 
   useEffect(() => {
-    api.professions().then(data => {
+    api.professions.fetchAll().then(data => {
       const professionsList = Object.keys(data).map(professionName => ({
         label: data[professionName].name,
         value: data[professionName]._id
@@ -58,7 +58,7 @@ const RegisterForm = () => {
       setProfessions(professionsList)
     })
 
-    api.qualities().then(data => {
+    api.qualities.fetchAll().then(data => {
       const qualitiesList = Object.keys(data).map(optionName => ({
         value: data[optionName]._id,
         label: data[optionName].name,

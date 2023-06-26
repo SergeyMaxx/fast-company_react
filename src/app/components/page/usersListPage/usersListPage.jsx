@@ -28,7 +28,7 @@ const UsersListPage = () => {
 
   useEffect(() => {
     api.users.fetchAll().then(data => setUsers(data))
-    api.professions().then(data => setProfessions(data))
+    api.professions.fetchAll().then(data => setProfessions(data))
   }, [])
 
   const handleDelete = userId => {
