@@ -6,18 +6,19 @@ import api from '../../../api'
 import SearchStatus from '../../UI/searchStatus'
 import UsersTable from '../../UI/usersTable'
 import _ from 'lodash'
+import {useUser} from '../../../hooks/useUsers'
 
 const UsersListPage = () => {
-  const [users, setUsers] = useState(null)
+  const {users} = useUser()
   const [currentPage, setCurrentPage] = useState(1)
   const [search, setSearch] = useState('')
   const [professions, setProfessions] = useState(null)
   const [selectedProf, setSelectedProf] = useState()
   const [sortBy, setSortBy] = useState({path: 'name', order: 'asc'})
-  const pageSize = 4
+  const pageSize = 8
 
   const handleSelectProf = item => {
-    setSearch('')
+    search.trim() && setSearch('')
     setSelectedProf(item)
   }
 
@@ -27,19 +28,20 @@ const UsersListPage = () => {
   }
 
   useEffect(() => {
-    api.users.fetchAll().then(data => setUsers(data))
     api.professions.fetchAll().then(data => setProfessions(data))
   }, [])
 
   const handleDelete = userId => {
-    setUsers(p => p.filter(user => user._id !== userId))
+    // setUsers(p => p.filter(user => user._id !== userId))
+    console.log(userId)
   }
 
   const handleToggleBookMark = id => {
-    setUsers(p => p.map(user => user._id === id
+    const newArray = users.map(user => user._id === id
       ? {...user, bookmark: !user.bookmark}
       : user
-    ))
+    )
+    console.log(newArray)
   }
 
   useEffect(() => {
@@ -106,7 +108,7 @@ const UsersListPage = () => {
       </div>
     )
   }
-  return 'Loading...'
+  return <h3>'Loading...'</h3>
 }
 
 export default UsersListPage
