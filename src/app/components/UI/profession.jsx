@@ -6,7 +6,7 @@ const Profession = ({id}) => {
   const {isLoading, getProfession} = useProfessions()
   const prof = getProfession(id)
 
-  return isLoading ? <p>{prof.name}</p> : <h3>'Loading...'</h3>
+  return !isLoading ? <p>{prof.name}</p> : <h3>'Loading...'</h3>
 }
 
 Profession.propTypes = {

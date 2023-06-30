@@ -10,7 +10,7 @@ const BookMark = ({status, remove}) => {
 }
 
 BookMark.propTypes = {
-  status: PropTypes.bool.isRequired,
+  status: PropTypes.bool,
   remove: PropTypes.func.isRequired
 }
 

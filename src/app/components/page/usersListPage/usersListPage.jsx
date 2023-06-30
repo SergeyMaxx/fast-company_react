@@ -9,7 +9,7 @@ import _ from 'lodash'
 import {useUser} from '../../../hooks/useUsers'
 
 const UsersListPage = () => {
-  const {users} = useUser()
+  const {users, setUsers} = useUser()
   const [currentPage, setCurrentPage] = useState(1)
   const [search, setSearch] = useState('')
   const [professions, setProfessions] = useState(null)
@@ -32,8 +32,7 @@ const UsersListPage = () => {
   }, [])
 
   const handleDelete = userId => {
-    // setUsers(p => p.filter(user => user._id !== userId))
-    console.log(userId)
+    setUsers(p => p.filter(user => user._id !== userId))
   }
 
   const handleToggleBookMark = id => {
@@ -41,7 +40,7 @@ const UsersListPage = () => {
       ? {...user, bookmark: !user.bookmark}
       : user
     )
-    console.log(newArray)
+    setUsers(newArray)
   }
 
   useEffect(() => {

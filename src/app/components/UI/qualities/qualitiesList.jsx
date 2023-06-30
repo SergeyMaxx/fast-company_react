@@ -18,7 +18,7 @@ const QualitiesList = ({qualities}) => {
 }
 
 QualitiesList.propTypes = {
-  qualities: PropTypes.arrayOf(PropTypes.object)
+  qualities: PropTypes.arrayOf(PropTypes.string)
 }
 
 export default QualitiesList
