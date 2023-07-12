@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import userService from '../services/user.service'
 import {toast} from 'react-toastify'
 
-const UserContext = React.createContext()
+const UserContext = React.createContext(null)
 
 export const useUser = () => useContext(UserContext)
 
