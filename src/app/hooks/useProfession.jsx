@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ProfessionService from '../services/profession.service'
 import {toast} from 'react-toastify'
 
-const ProfessionContext = React.createContext()
+const ProfessionContext = React.createContext(null)
 
 export const useProfessions = () => useContext(ProfessionContext)
 

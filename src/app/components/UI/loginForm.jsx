@@ -1,8 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import TextField from '../common/form/textField'
 import {validator} from '../../utils/validator'
+import {useAuth} from '../../hooks/useAuth'
+import {useHistory} from 'react-router-dom'
 
 const LoginForm = () => {
+  const history = useHistory()
+  const {signIn} = useAuth()
+  const [loginError, setLoginError] = useState(null)
   const [errors, setErrors] = useState({})
   const [data, setData] = useState({
     email: '',
@@ -15,21 +20,15 @@ const LoginForm = () => {
       ...prevState,
       [target.name]: target.value
     }))
+    setLoginError(null)
   }
 
   const validatorConfig = {
     email: {
-      isRequired: {message: 'E-mail is required'},
-      isEmail: {message: 'email entered incorrectly'}
+      isRequired: {message: 'E-mail is required'}
     },
     password: {
-      isRequired: {message: 'Password is required'},
-      isCapitalSymbol: {message: 'password must contain a capital letter'},
-      isContainDigit: {message: 'password must contain a number'},
-      min: {
-        message: 'password must contain at least 8 characters',
-        value: 8
-      }
+      isRequired: {message: 'Password is required'}
     }
   }
 
@@ -45,14 +44,22 @@ const LoginForm = () => {
 
   const isValid = Object.keys(errors).length !== 0
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
     if (validate()) return
-    console.log(data)
+
+    try {
+      await signIn(data)
+      history.push('/')
+
+    } catch (error) {
+      setLoginError(error.message)
+    }
   }
 
   return (
     <form onSubmit={handleSubmit}>
+      {loginError && <div className='text-danger'>{loginError}</div>}
       <TextField
         label="E-mail"
         name="email"
@@ -72,7 +79,7 @@ const LoginForm = () => {
       />
       <button
         type="submit"
-        disabled={isValid}
+        disabled={isValid || !!loginError}
         className="btn btn-primary w-100 mx-auto"
       >
         Submit

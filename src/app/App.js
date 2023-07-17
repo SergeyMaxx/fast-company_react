@@ -7,10 +7,12 @@ import Users from './layouts/users'
 import {ProfessionProvider} from './hooks/useProfession'
 import {QualitiesProvider} from './hooks/useQualities'
 import {ToastContainer} from 'react-toastify'
+import AuthProvider from './hooks/useAuth'
 
 const App = () => {
   return (
     <div>
+      <AuthProvider>
       <NavBar/>
       <QualitiesProvider>
         <ProfessionProvider>
@@ -23,6 +25,7 @@ const App = () => {
         </ProfessionProvider>
       </QualitiesProvider>
       <ToastContainer/>
+      </AuthProvider>
     </div>
   )
 }
