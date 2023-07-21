@@ -6,7 +6,7 @@ import {useHistory} from 'react-router-dom'
 
 const LoginForm = () => {
   const history = useHistory()
-  const {signIn} = useAuth()
+  const {login} = useAuth()
   const [loginError, setLoginError] = useState(null)
   const [errors, setErrors] = useState({})
   const [data, setData] = useState({
@@ -49,8 +49,12 @@ const LoginForm = () => {
     if (validate()) return
 
     try {
-      await signIn(data)
-      history.push('/')
+      await login(data)
+      history.push(
+        history.location.state
+          ? history.location.state.from.pathname
+          : '/'
+      )
 
     } catch (error) {
       setLoginError(error.message)
@@ -59,7 +63,7 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {loginError && <div className='text-danger'>{loginError}</div>}
+      {loginError && <div className="text-danger">{loginError}</div>}
       <TextField
         label="E-mail"
         name="email"

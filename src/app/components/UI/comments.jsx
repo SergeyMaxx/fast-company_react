@@ -1,31 +1,10 @@
 import {orderBy} from 'lodash'
-import React, {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
-import api from '../../api'
+import React from 'react'
 import CommentsList, {AddCommentForm} from '../common/comments'
+import {useComments} from '../../hooks/useComments'
 
 const Comments = () => {
-  const {userId} = useParams()
-  const [comments, setComments] = useState([])
-
-  useEffect(() => {
-    api.comments
-      .fetchCommentsForUser(userId)
-      .then((data) => setComments(data))
-  }, [])
-
-  const handleSubmit = data => {
-    api.comments
-      .add({...data, pageId: userId})
-      .then(data => setComments([...comments, data]))
-  }
-
-  const handleRemoveComment = id => {
-    api.comments.remove(id).then(id => {
-      setComments(comments.filter(x => x._id !== id))
-    })
-  }
-
+  const {createComment, comments, removeComment} = useComments()
   const sortedComments = orderBy(comments, ['created_at'], ['desc'])
 
   return (
@@ -33,7 +12,7 @@ const Comments = () => {
       <div className="card mb-2">
         {' '}
         <div className="card-body ">
-          <AddCommentForm onSubmit={handleSubmit}/>
+          <AddCommentForm onSubmit={data => createComment(data)}/>
         </div>
       </div>
       {sortedComments.length > 0 && (
@@ -43,7 +22,7 @@ const Comments = () => {
             <hr/>
             <CommentsList
               comments={sortedComments}
-              onRemove={handleRemoveComment}
+              onRemove={id => removeComment(id)}
             />
           </div>
         </div>
