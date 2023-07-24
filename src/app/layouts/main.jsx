@@ -11,7 +11,7 @@ const Main = () => {
       <ul>
         <li>Status: {status}</li>
         <li>Progress: {progress}%</li>
-        {error && <li>Error: {error}</li>}
+        {error && <li>Error: {error.message}</li>}
       </ul>
       <button className="btn btn-primary" onClick={() => initialize()}>
         {' '}

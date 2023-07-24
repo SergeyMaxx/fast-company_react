@@ -6,9 +6,7 @@ import {useQualities} from '../../../hooks/useQualities'
 const QualitiesList = ({qualities}) => {
   const {isLoading} = useQualities()
 
-  if (isLoading) {
-    return <h3>'Loading...'</h3>
-  }
+  if (isLoading) return 'Loading...'
 
   return (
     <>
@@ -18,7 +16,7 @@ const QualitiesList = ({qualities}) => {
 }
 
 QualitiesList.propTypes = {
-  qualities: PropTypes.arrayOf(PropTypes.string)
+  qualities: PropTypes.array
 }
 
 export default QualitiesList
