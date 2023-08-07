@@ -7,12 +7,14 @@ import UsersTable from '../../UI/usersTable'
 import _ from 'lodash'
 import {useUser} from '../../../hooks/useUsers'
 import {useAuth} from '../../../hooks/useAuth'
-import {useProfessions} from '../../../hooks/useProfession'
+import {useSelector} from 'react-redux'
+import {getProfessions, getProfessionsLoadingStatus} from '../../../store/professions'
 
 const UsersListPage = () => {
   const {users, setUsers} = useUser()
   const {currentUser} = useAuth()
-  const {isLoading: professionsLoading, professions} = useProfessions()
+  const professions = useSelector(getProfessions())
+  const professionsLoading = useSelector(getProfessionsLoadingStatus())
   const [currentPage, setCurrentPage] = useState(1)
   const [search, setSearch] = useState('')
   const [selectedProf, setSelectedProf] = useState()
