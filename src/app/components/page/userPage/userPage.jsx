@@ -4,12 +4,12 @@ import UserCard from '../../UI/userCard'
 import QualitiesCard from '../../UI/qualitiesCard'
 import MeetingsCard from '../../UI/meetingsCard'
 import Comments from '../../UI/comments'
-import {useUser} from '../../../hooks/useUsers'
 import {CommentsProvider} from '../../../hooks/useComments'
+import {useSelector} from 'react-redux'
+import {getUserById} from '../../../store/users'
 
 const UserPage = ({id}) => {
-  const {getUserById} = useUser()
-  const user = getUserById(id)
+  const user = useSelector(getUserById(id))
 
   return (
     user

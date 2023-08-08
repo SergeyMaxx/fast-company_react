@@ -1,26 +1,25 @@
 import React, {useEffect, useState} from 'react'
-import {useHistory} from 'react-router-dom'
 import {validator} from '../../../utils/validator'
 import TextField from '../../common/form/textField'
 import SelectField from '../../common/form/selectField'
 import RadioField from '../../common/form/radioField'
 import MultiSelectField from '../../common/form/multiSelectField'
 import BackHistoryButton from '../../common/backButton'
-import {useAuth} from '../../../hooks/useAuth'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {getQualitiesLoadingStatus, getQualities} from '../../../store/qualities'
 import {getProfessions, getProfessionsLoadingStatus} from '../../../store/professions'
+import {getCurrentUserData, updateUser} from '../../../store/users'
 
 const EditUserPage = () => {
-  const history = useHistory()
   const [isLoading, setIsLoading] = useState(true)
   const professions = useSelector(getProfessions())
   const professionsLoading = useSelector(getProfessionsLoadingStatus())
   const qualities = useSelector(getQualities())
   const qualitiesLoading = useSelector(getQualitiesLoadingStatus())
-  const {updateUser, currentUser} = useAuth()
+  const currentUser = useSelector(getCurrentUserData())
   const [errors, setErrors] = useState({})
   const [data, setData] = useState()
+  const dispatch = useDispatch()
 
   const qualitiesList = qualities.map(q => ({label: q.name, value: q._id}))
   const professionsList = professions.map(p => ({label: p.name, value: p._id}))
@@ -86,7 +85,7 @@ const EditUserPage = () => {
 
   const isValid = Object.keys(errors).length !== 0
 
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault()
     if (validate()) return
 
@@ -94,14 +93,7 @@ const EditUserPage = () => {
       ...data,
       qualities: data.qualities.map(q => q.value)
     }
-
-    try {
-      await updateUser(newData)
-      history.push(`/users/${currentUser._id}`)
-
-    } catch (error) {
-      setErrors(error)
-    }
+    dispatch(updateUser(newData))
   }
 
   return (
