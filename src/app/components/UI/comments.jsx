@@ -1,15 +1,19 @@
 import {orderBy} from 'lodash'
 import React, {useEffect} from 'react'
 import CommentsList, {AddCommentForm} from '../common/comments'
-import {useComments} from '../../hooks/useComments'
 import {useParams} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
-import {getComments, getCommentsLoadingStatus, loadCommentsList} from '../../store/comments'
+import {
+  createComment,
+  getComments,
+  getCommentsLoadingStatus,
+  loadCommentsList,
+  removeComment
+} from '../../store/comments'
 
 const Comments = () => {
   const {userId} = useParams()
   const dispatch = useDispatch()
-  const {createComment, removeComment} = useComments()
   const isLoading = useSelector(getCommentsLoadingStatus())
   const comments = useSelector(getComments())
   const sortedComments = orderBy(comments, ['created_at'], ['desc'])
@@ -23,7 +27,9 @@ const Comments = () => {
       <div className="card mb-2">
         {' '}
         <div className="card-body ">
-          <AddCommentForm onSubmit={data => createComment(data)}/>
+          <AddCommentForm
+            onSubmit={data => dispatch(createComment({...data, pageId: userId}))}
+          />
         </div>
       </div>
       {sortedComments.length > 0 && (
@@ -35,7 +41,7 @@ const Comments = () => {
               ?
               <CommentsList
                 comments={sortedComments}
-                onRemove={id => removeComment(id)}
+                onRemove={id => dispatch(removeComment(id))}
               />
               : 'Loading...'
             }
