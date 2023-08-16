@@ -5,14 +5,15 @@ import GroupList from '../../common/groupList'
 import SearchStatus from '../../UI/searchStatus'
 import UsersTable from '../../UI/usersTable'
 import _ from 'lodash'
-import {useUser} from '../../../hooks/useUsers'
-import {useAuth} from '../../../hooks/useAuth'
-import {useProfessions} from '../../../hooks/useProfession'
+import {useSelector} from 'react-redux'
+import {getProfessions, getProfessionsLoadingStatus} from '../../../store/professions'
+import {getCurrentUserId, getUsersList} from '../../../store/users'
 
 const UsersListPage = () => {
-  const {users, setUsers} = useUser()
-  const {currentUser} = useAuth()
-  const {isLoading: professionsLoading, professions} = useProfessions()
+  const users = useSelector(getUsersList())
+  const currentUserId = useSelector(getCurrentUserId())
+  const professions = useSelector(getProfessions())
+  const professionsLoading = useSelector(getProfessionsLoadingStatus())
   const [currentPage, setCurrentPage] = useState(1)
   const [search, setSearch] = useState('')
   const [selectedProf, setSelectedProf] = useState()
@@ -34,7 +35,7 @@ const UsersListPage = () => {
       ? {...user, bookmark: !user.bookmark}
       : user
     )
-    setUsers(newArray)
+    console.log(newArray)
   }
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const UsersListPage = () => {
       ? users.filter(u => u.name.toLowerCase().includes(search))
       : filterUser
 
-    const filteredUsers = filteredUser.filter(u => u._id !== currentUser._id)
+    const filteredUsers = filteredUser.filter(u => u._id !== currentUserId)
     const count = filteredUsers.length
     const sortedUser = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order])
     const userCrop = paginate(sortedUser, currentPage, pageSize)
